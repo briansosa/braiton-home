@@ -9,6 +9,11 @@ import (
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
+type Departamento struct {
+	Direccion    string
+	Inmobiliaria string
+}
+
 func main() {
 	port := os.Getenv("PORT")
 
@@ -25,5 +30,21 @@ func main() {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
 	})
 
+	router.GET("api/departamentos-consultados", DepartamentosConsultados)
+
 	router.Run(":" + port)
+}
+
+func DepartamentosConsultados(c *gin.Context) {
+	departamentos := []Departamento{
+		Departamento{
+			Direccion:    "Sitio al 1200",
+			Inmobiliaria: "San Miguel",
+		},
+		Departamento{
+			Direccion:    "Las Piedras al 1500",
+			Inmobiliaria: "German algo",
+		},
+	}
+	c.JSON(http.StatusOK, departamentos)
 }
