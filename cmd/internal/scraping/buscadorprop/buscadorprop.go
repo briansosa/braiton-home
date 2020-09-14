@@ -3,6 +3,7 @@ package buscadorprop
 import (
 	"braiton/braiton-home/cmd/internal/scraping"
 	"fmt"
+	"strings"
 
 	"github.com/gocolly/colly/v2"
 )
@@ -17,6 +18,7 @@ func MakeScraping(c *colly.Collector, url string) []scraping.Department {
 			Details:      GetDetails(e),
 			Price:        GetPrice(e),
 			LinkToDetail: GetLinkToDetail(e),
+			Image:        GetImageName(e),
 		}
 		departments = append(departments, department)
 
@@ -54,4 +56,15 @@ func GetLinkToDetail(e *colly.HTMLElement) string {
 	link := e.ChildAttr(".col-content > a", "href")
 	absoluteLink := e.Request.AbsoluteURL(link)
 	return absoluteLink
+}
+
+func GetImageLink(e *colly.HTMLElement) string {
+	return e.ChildAttr(".col-image img", "src")
+}
+
+func GetImageName(e *colly.HTMLElement) string {
+	linkToImage := GetImageLink(e)
+	splitedLink := strings.Split(linkToImage, "/")
+	imageName := splitedLink[len(splitedLink)-1]
+	return imageName
 }

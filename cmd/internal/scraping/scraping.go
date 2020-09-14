@@ -6,5 +6,6 @@ type Department struct {
 	Title        string
 	Details      string
 	Price        string
+	Image        string
 	LinkToDetail string
 }
